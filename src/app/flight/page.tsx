@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 
-// Flight type interface define करें
+// Flight type interface
 interface Flight {
     id: number;
     airline: string;
@@ -53,9 +53,14 @@ export default function FlightPage() {
         class: 'Economy'
     });
     const [tripType, setTripType] = useState('round');
-    // यहाँ type fix किया - Flight | null
     const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
     const [showBooking, setShowBooking] = useState(false);
+
+    // Filter states
+    const [selectedStops, setSelectedStops] = useState<string[]>([]);
+    const [selectedAirlines, setSelectedAirlines] = useState<string[]>([]);
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 2000]);
+    const [sortBy, setSortBy] = useState('recommended');
 
     const flights: Flight[] = [
         {
@@ -126,6 +131,62 @@ export default function FlightPage() {
 
     const airlines = ['Emirates', 'British Airways', 'Qatar Airways', 'Etihad Airways'];
     const stopsFilter = ['Non-stop', '1 Stop', '2+ Stops'];
+
+    // Filter and sort flights
+    const filteredFlights = flights.filter(flight => {
+        // Filter by stops
+        if (selectedStops.length > 0) {
+            const flightStopType = flight.stops === 'Non-stop' ? 'Non-stop' :
+                flight.stops.includes('1 Stop') ? '1 Stop' : '2+ Stops';
+            if (!selectedStops.includes(flightStopType)) return false;
+        }
+
+        // Filter by airlines
+        if (selectedAirlines.length > 0 && !selectedAirlines.includes(flight.airline)) {
+            return false;
+        }
+
+        // Filter by price range
+        if (flight.price < priceRange[0] || flight.price > priceRange[1]) {
+            return false;
+        }
+
+        return true;
+    }).sort((a, b) => {
+        switch (sortBy) {
+            case 'price-low':
+                return a.price - b.price;
+            case 'price-high':
+                return b.price - a.price;
+            case 'duration':
+                return parseInt(a.duration) - parseInt(b.duration);
+            case 'departure':
+                return a.departTime.localeCompare(b.departTime);
+            default:
+                return 0;
+        }
+    });
+
+    // Toggle stop filter
+    const toggleStop = (stop: string) => {
+        setSelectedStops(prev =>
+            prev.includes(stop) ? prev.filter(s => s !== stop) : [...prev, stop]
+        );
+    };
+
+    // Toggle airline filter
+    const toggleAirline = (airline: string) => {
+        setSelectedAirlines(prev =>
+            prev.includes(airline) ? prev.filter(a => a !== airline) : [...prev, airline]
+        );
+    };
+
+    // Clear all filters
+    const clearFilters = () => {
+        setSelectedStops([]);
+        setSelectedAirlines([]);
+        setPriceRange([0, 2000]);
+    };
 
     return (
         <div className="w-full bg-white text-gray-700">
@@ -270,16 +331,26 @@ export default function FlightPage() {
             </section>
 
             {/* ===== FLIGHT RESULTS ===== */}
-            <section ref={resultsRef.ref} className="relative py-20 overflow-hidden bg-linear-to-b from-white via-sky-50/30 to-white">
+            <section ref={resultsRef.ref} className="relative py-20 bg-linear-to-b from-white via-sky-50/30 to-white">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-[#0f88c0]/5 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-300/10 rounded-full blur-3xl"></div>
 
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                        {/* Filters Sidebar */}
+                        {/* Filters Sidebar - STICKY */}
                         <div className="lg:col-span-1">
-                            <div className="bg-white rounded-2xl border border-gray-100 shadow-lg p-6 sticky top-24">
-                                <h3 className="text-lg font-bold text-[#0A192F] mb-6">Filters</h3>
+                            <div className="bg-white rounded-2xl border border-gray-100 shadow-lg p-6 sticky top-24 z-10">
+                                <div className="flex items-center justify-between mb-6">
+                                    <h3 className="text-lg font-bold text-[#0A192F]">Filters</h3>
+                                    {(selectedStops.length > 0 || selectedAirlines.length > 0) && (
+                                        <button
+                                            onClick={clearFilters}
+                                            className="text-sm text-[#0f88c0] font-semibold hover:underline cursor-pointer"
+                                        >
+                                            Clear All
+                                        </button>
+                                    )}
+                                </div>
 
                                 {/* Stops Filter */}
                                 <div className="mb-6">
@@ -287,7 +358,12 @@ export default function FlightPage() {
                                     <div className="space-y-2">
                                         {stopsFilter.map((stop) => (
                                             <label key={stop} className="flex items-center gap-3 cursor-pointer group">
-                                                <input type="checkbox" className="w-5 h-5 rounded border-gray-300 text-[#0f88c0] focus:ring-[#0f88c0] cursor-pointer" />
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedStops.includes(stop)}
+                                                    onChange={() => toggleStop(stop)}
+                                                    className="w-5 h-5 rounded border-gray-300 text-[#0f88c0] focus:ring-[#0f88c0] cursor-pointer"
+                                                />
                                                 <span className="text-sm text-gray-600 group-hover:text-[#0f88c0] transition-colors">{stop}</span>
                                             </label>
                                         ))}
@@ -300,7 +376,12 @@ export default function FlightPage() {
                                     <div className="space-y-2">
                                         {airlines.map((airline) => (
                                             <label key={airline} className="flex items-center gap-3 cursor-pointer group">
-                                                <input type="checkbox" className="w-5 h-5 rounded border-gray-300 text-[#0f88c0] focus:ring-[#0f88c0] cursor-pointer" />
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedAirlines.includes(airline)}
+                                                    onChange={() => toggleAirline(airline)}
+                                                    className="w-5 h-5 rounded border-gray-300 text-[#0f88c0] focus:ring-[#0f88c0] cursor-pointer"
+                                                />
                                                 <span className="text-sm text-gray-600 group-hover:text-[#0f88c0] transition-colors">{airline}</span>
                                             </label>
                                         ))}
@@ -311,12 +392,26 @@ export default function FlightPage() {
                                 <div>
                                     <h4 className="text-sm font-bold text-gray-700 mb-3">Price Range</h4>
                                     <div className="px-2">
-                                        <input type="range" min="0" max="2000" className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0f88c0]" />
+                                        <input
+                                            type="range"
+                                            min="0"
+                                            max="2000"
+                                            value={priceRange[1]}
+                                            onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+                                            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0f88c0]"
+                                        />
                                         <div className="flex justify-between mt-2 text-sm text-gray-600">
                                             <span>$0</span>
-                                            <span>$2000+</span>
+                                            <span>${priceRange[1]}+</span>
                                         </div>
                                     </div>
+                                </div>
+
+                                {/* Active Filters Count */}
+                                <div className="mt-6 pt-6 border-t border-gray-100">
+                                    <p className="text-sm text-gray-500">
+                                        {selectedStops.length + selectedAirlines.length} filter(s) active
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -325,105 +420,125 @@ export default function FlightPage() {
                         <div className="lg:col-span-3 space-y-6">
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-2xl font-bold text-[#0A192F]">
-                                    {flights.length} Flights Found
+                                    {filteredFlights.length} Flight{filteredFlights.length !== 1 ? 's' : ''} Found
                                 </h2>
-                                <select className="px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 focus:outline-none focus:border-[#0f88c0] cursor-pointer">
-                                    <option>Sort by: Recommended</option>
-                                    <option>Price: Low to High</option>
-                                    <option>Price: High to Low</option>
-                                    <option>Duration: Shortest</option>
-                                    <option>Departure Time</option>
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                    className="px-4 py-2 rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-700 focus:outline-none focus:border-[#0f88c0] cursor-pointer"
+                                >
+                                    <option value="recommended">Sort by: Recommended</option>
+                                    <option value="price-low">Price: Low to High</option>
+                                    <option value="price-high">Price: High to Low</option>
+                                    <option value="duration">Duration: Shortest</option>
+                                    <option value="departure">Departure Time</option>
                                 </select>
                             </div>
 
-                            {flights.map((flight, index) => (
-                                <div
-                                    key={flight.id}
-                                    className={`group bg-white rounded-2xl border-2 border-gray-100 hover:border-[#0f88c0]/40 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 cursor-pointer ${resultsRef.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                                    style={{ transitionDelay: `${index * 100}ms` }}
-                                    onClick={() => { setSelectedFlight(flight); setShowBooking(true); }}
-                                >
-                                    <div className="p-6">
-                                        {/* Airline & Price Header */}
-                                        <div className="flex items-center justify-between mb-6">
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#0f88c0]/10 to-sky-100 flex items-center justify-center">
-                                                    <svg className="w-7 h-7 text-[#0f88c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                                    </svg>
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-[#0A192F]">{flight.airline}</h3>
-                                                    <p className="text-sm text-gray-500">{flight.flightNumber} • {flight.aircraft}</p>
-                                                </div>
-                                            </div>
-                                            <div className="text-right">
-                                                <div className="flex items-baseline gap-2">
-                                                    <span className="text-3xl font-black text-[#0A192F]">${flight.price}</span>
-                                                    <span className="text-sm text-gray-400 line-through">${flight.originalPrice}</span>
-                                                </div>
-                                                <p className="text-xs text-gray-500">per person</p>
-                                            </div>
-                                        </div>
-
-                                        {/* Flight Route */}
-                                        <div className="flex items-center justify-between mb-6">
-                                            <div className="text-center">
-                                                <p className="text-3xl font-black text-[#0A192F] mb-1">{flight.departTime}</p>
-                                                <p className="text-sm font-bold text-gray-600">{flight.from}</p>
-                                            </div>
-
-                                            <div className="flex-1 px-8">
-                                                <div className="relative">
-                                                    <div className="h-0.5 bg-gray-300 w-full"></div>
-                                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3">
-                                                        <div className="text-center">
-                                                            <p className="text-xs font-bold text-[#0f88c0]">{flight.duration}</p>
-                                                            <p className="text-xs text-gray-500">{flight.stops}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="absolute top-1/2 -translate-y-1/2 left-0 w-2 h-2 bg-gray-400 rounded-full"></div>
-                                                    <div className="absolute top-1/2 -translate-y-1/2 right-0 w-2 h-2 bg-[#0f88c0] rounded-full"></div>
-                                                </div>
-                                            </div>
-
-                                            <div className="text-center">
-                                                <p className="text-3xl font-black text-[#0A192F] mb-1">{flight.arriveTime}</p>
-                                                <p className="text-sm font-bold text-gray-600">{flight.to}</p>
-                                            </div>
-                                        </div>
-
-                                        {/* Amenities & Seats */}
-                                        <div className="flex items-center justify-between pt-6 border-t border-gray-100">
-                                            <div className="flex items-center gap-4">
-                                                {flight.amenities.map((amenity) => (
-                                                    <div key={amenity} className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-lg">
-                                                        <svg className="w-4 h-4 text-[#0f88c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                                        </svg>
-                                                        <span className="text-xs font-semibold text-gray-600">{amenity}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <span className={`text-sm font-bold ${flight.seatsAvailable <= 5 ? 'text-red-500' : 'text-green-600'}`}>
-                                                    {flight.seatsAvailable} seats left
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Book Button */}
-                                    <div className="px-6 pb-6">
-                                        <button className="w-full h-12 bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-bold rounded-xl shadow-lg shadow-sky-500/30 hover:shadow-xl transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer">
-                                            Select Flight
-                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                            </svg>
-                                        </button>
-                                    </div>
+                            {filteredFlights.length === 0 ? (
+                                <div className="text-center py-20 bg-white rounded-2xl border border-gray-100">
+                                    <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <h3 className="text-xl font-bold text-gray-700 mb-2">No flights found</h3>
+                                    <p className="text-gray-500 mb-4">Try adjusting your filters to see more results</p>
+                                    <button
+                                        onClick={clearFilters}
+                                        className="px-6 py-3 bg-linear-to-r from-[#0f88c0] to-sky-500 text-white font-semibold rounded-xl cursor-pointer hover:shadow-lg transition-all"
+                                    >
+                                        Clear Filters
+                                    </button>
                                 </div>
-                            ))}
+                            ) : (
+                                filteredFlights.map((flight, index) => (
+                                    <div
+                                        key={flight.id}
+                                        className={`group bg-white rounded-2xl border-2 border-gray-100 hover:border-[#0f88c0]/40 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 cursor-pointer ${resultsRef.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+                                        style={{ transitionDelay: `${index * 100}ms` }}
+                                        onClick={() => { setSelectedFlight(flight); setShowBooking(true); }}
+                                    >
+                                        <div className="p-6">
+                                            {/* Airline & Price Header */}
+                                            <div className="flex items-center justify-between mb-6">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-12 h-12 rounded-xl bg-linear-to-br from-[#0f88c0]/10 to-sky-100 flex items-center justify-center">
+                                                        <svg className="w-7 h-7 text-[#0f88c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <h3 className="text-lg font-bold text-[#0A192F]">{flight.airline}</h3>
+                                                        <p className="text-sm text-gray-500">{flight.flightNumber} • {flight.aircraft}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="flex items-baseline gap-2">
+                                                        <span className="text-3xl font-black text-[#0A192F]">${flight.price}</span>
+                                                        <span className="text-sm text-gray-400 line-through">${flight.originalPrice}</span>
+                                                    </div>
+                                                    <p className="text-xs text-gray-500">per person</p>
+                                                </div>
+                                            </div>
+
+                                            {/* Flight Route */}
+                                            <div className="flex items-center justify-between mb-6">
+                                                <div className="text-center">
+                                                    <p className="text-3xl font-black text-[#0A192F] mb-1">{flight.departTime}</p>
+                                                    <p className="text-sm font-bold text-gray-600">{flight.from}</p>
+                                                </div>
+
+                                                <div className="flex-1 px-8">
+                                                    <div className="relative">
+                                                        <div className="h-0.5 bg-gray-300 w-full"></div>
+                                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3">
+                                                            <div className="text-center">
+                                                                <p className="text-xs font-bold text-[#0f88c0]">{flight.duration}</p>
+                                                                <p className="text-xs text-gray-500">{flight.stops}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="absolute top-1/2 -translate-y-1/2 left-0 w-2 h-2 bg-gray-400 rounded-full"></div>
+                                                        <div className="absolute top-1/2 -translate-y-1/2 right-0 w-2 h-2 bg-[#0f88c0] rounded-full"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="text-center">
+                                                    <p className="text-3xl font-black text-[#0A192F] mb-1">{flight.arriveTime}</p>
+                                                    <p className="text-sm font-bold text-gray-600">{flight.to}</p>
+                                                </div>
+                                            </div>
+
+                                            {/* Amenities & Seats */}
+                                            <div className="flex items-center justify-between pt-6 border-t border-gray-100">
+                                                <div className="flex items-center gap-4">
+                                                    {flight.amenities.map((amenity) => (
+                                                        <div key={amenity} className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-50 rounded-lg">
+                                                            <svg className="w-4 h-4 text-[#0f88c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                            </svg>
+                                                            <span className="text-xs font-semibold text-gray-600">{amenity}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`text-sm font-bold ${flight.seatsAvailable <= 5 ? 'text-red-500' : 'text-green-600'}`}>
+                                                        {flight.seatsAvailable} seats left
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Book Button */}
+                                        <div className="px-6 pb-6">
+                                            <button className="w-full h-12 bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-bold rounded-xl shadow-lg shadow-sky-500/30 hover:shadow-xl transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer">
+                                                Select Flight
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>

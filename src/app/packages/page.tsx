@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 
@@ -123,10 +124,13 @@ export default function PackagesPage() {
             <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
                 {/* Background Image */}
                 <div className="absolute inset-0">
-                    <img
+                    <Image
                         src="https://images.unsplash.com/photo-1569839333583-7375336cde4b?q=80&w=1030&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="Travel Packages"
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
+                        sizes="100vw"
+                        priority
                     />
                     {/* Single Dark Overlay */}
                     <div className="absolute inset-0 bg-[#0A192F]/85"></div>
@@ -192,11 +196,12 @@ export default function PackagesPage() {
                             >
                                 {/* Image Section */}
                                 <div className="relative h-64 overflow-hidden">
-                                    <img
+                                    <Image
                                         src={pkg.image}
                                         alt={pkg.title}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                        loading="lazy"
+                                        fill
+                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
                                     <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent"></div>
 

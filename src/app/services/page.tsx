@@ -152,11 +152,11 @@ export default function ServicesPage() {
     ];
 
     return (
-        <div className="w-full bg-white text-gray-700 overflow-hidden">
+        <div className="w-full bg-white text-gray-700 ">
             <Navbar />
 
             {/* ===== HERO SECTION ===== */}
-            <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
+            <section className="relative min-h-[75vh] flex items-center justify-center">
                 <div className="absolute inset-0">
                     <img
                         src="https://images.unsplash.com/photo-1569839333583-7375336cde4b?q=80&w=1030&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"

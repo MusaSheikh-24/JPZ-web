@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 
@@ -95,7 +96,7 @@ export default function DestinationsPage() {
             name: 'Sydney',
             country: 'Australia',
             continent: 'Oceania',
-            image: 'https://images.unsplash.com/photo-1506973035872-a4c162e9f6d2?w=600&auto=format&fit=crop',
+            image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             bestTime: 'Sep - Nov',
             tags: ['Beach', 'Urban', 'Nature'],
             temp: '8°C - 26°C',
@@ -105,7 +106,7 @@ export default function DestinationsPage() {
             name: 'Santorini',
             country: 'Greece',
             continent: 'Europe',
-            image: 'https://images.unsplash.com/photo-1613395877344-13d4c79e4284?w=600&auto=format&fit=crop',
+            image: 'https://images.unsplash.com/photo-1687786071688-a92e6bdbefc5?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
             bestTime: 'Apr - Oct',
             tags: ['Romance', 'Beach', 'Views'],
             temp: '10°C - 28°C',
@@ -124,10 +125,13 @@ export default function DestinationsPage() {
             {/* ===== HERO SECTION ===== */}
             <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0">
-                    <img
+                    <Image
                         src="https://images.unsplash.com/photo-1569839333583-7375336cde4b?q=80&w=1030&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="Travel Destinations"
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
+                        sizes="100vw"
+                        priority
                     />
                     <div className="absolute inset-0 bg-[#0A192F]/85"></div>
                 </div>
@@ -188,11 +192,12 @@ export default function DestinationsPage() {
                             >
                                 {/* Large Image - 60% of card */}
                                 <div className="relative h-80 overflow-hidden">
-                                    <img
+                                    <Image
                                         src={dest.image}
                                         alt={dest.name}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                        loading="lazy"
+                                        fill
+                                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
                                     <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent"></div>
 

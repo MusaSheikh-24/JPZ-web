@@ -88,7 +88,7 @@ export default function Navbar() {
                     {/* Desktop CTA Button */}
                     <div className="hidden md:flex flex-1 justify-end">
                         <Link
-                            href="/packages"
+                            href="/flight"
                             className="px-6 py-3 bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white text-sm font-bold rounded-full shadow-lg shadow-sky-500/30 hover:shadow-xl hover:shadow-sky-400/50 transition-all duration-300 active:scale-[0.98]"
                         >
                             Book Now
@@ -173,7 +173,7 @@ export default function Navbar() {
                         <div className="pt-3">
 
                             <Link
-                                href="#book-now"
+                                href="/flight"
                                 onClick={() => setIsOpen(false)}
                                 className="block w-full text-center bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white px-5 py-3 rounded-full text-base font-bold shadow-lg shadow-sky-500/30 transition-all duration-300"
                             >
