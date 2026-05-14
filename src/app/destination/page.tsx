@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Navbar from '../components/navbar';
@@ -114,9 +114,11 @@ export default function DestinationsPage() {
         }
     ];
 
-    const filteredDestinations = activeContinent === 'All'
-        ? destinations
-        : destinations.filter(d => d.continent === activeContinent);
+    const filteredDestinations = useMemo(() => {
+        return activeContinent === 'All'
+            ? destinations
+            : destinations.filter(d => d.continent === activeContinent);
+    }, [activeContinent]);
 
     return (
         <div className="w-full bg-white text-gray-700">
@@ -243,12 +245,12 @@ export default function DestinationsPage() {
                                     </div>
 
                                     {/* Explore Button */}
-                                    <button className="w-full py-3.5 bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-bold text-base rounded-full shadow-lg shadow-sky-500/30 hover:shadow-xl hover:shadow-sky-400/50 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer group/btn">
+                                    <Link href={`/destination/${dest.name.toLowerCase().replace(/\s+/g, '-')}`} className="w-full py-3.5 bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-bold text-base rounded-full shadow-lg shadow-sky-500/30 hover:shadow-xl hover:shadow-sky-400/50 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer group/btn">
                                         <span>Explore Destination</span>
                                         <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         ))}
