@@ -31,9 +31,18 @@ export default function Footer() {
 
                         <div className="flex gap-3">
                             {socialLinks.map((social) => (
-                                <Link key={social.name} href="#" aria-label={social.name}
-                                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:text-[#0f88c0] hover:border-[#0f88c0]/40 hover:bg-[#0f88c0]/10 hover:scale-105 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f88c0]">
-                                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d={social.path} /></svg>
+                                <Link
+                                    key={social.name}
+                                    href="#"
+                                    aria-label={social.name}
+                                    className="group w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:border-transparent hover:scale-105 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f88c0] relative overflow-hidden"
+                                >
+                                    {/* Gradient Background on Hover */}
+                                    <span className="absolute inset-0 bg-linear-to-r from-[#0f88c0] to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                    {/* Icon - White on Hover */}
+                                    <svg className="relative w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d={social.path} />
+                                    </svg>
                                 </Link>
                             ))}
                         </div>
@@ -51,8 +60,11 @@ export default function Footer() {
                                     <ul className="space-y-3.5">
                                         {items.map((item) => (
                                             <li key={item}>
-                                                <Link href="#" className="group flex items-center gap-2 text-base text-gray-400 hover:text-white transition-all duration-200">
-                                                    <span className="w-0 group-hover:w-1.5 h-0.5 bg-[#0f88c0] transition-all duration-200"></span>
+                                                <Link
+                                                    href="#"
+                                                    className="group flex items-center gap-2 text-base text-gray-400 hover:text-transparent hover:bg-linear-to-r hover:from-[#0f88c0] hover:to-emerald-400 hover:bg-clip-text transition-all duration-200"
+                                                >
+                                                    <span className="w-0 group-hover:w-1.5 h-0.5 bg-linear-to-r from-[#0f88c0] to-emerald-400 transition-all duration-200 rounded-full"></span>
                                                     {item}
                                                 </Link>
                                             </li>
@@ -67,10 +79,16 @@ export default function Footer() {
                 {/* Bottom Row */}
                 <div className="mt-16 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
                     <p className="text-base text-gray-500">© {year} YourBrand. All rights reserved.</p>
-                    <div className="flex gap-6 text-base text-gray-500">
-                        <Link href="#" className="hover:text-white transition-colors">Privacy</Link>
-                        <Link href="#" className="hover:text-white transition-colors">Terms</Link>
-                        <Link href="#" className="hover:text-white transition-colors">Sitemap</Link>
+                    <div className="flex gap-6 text-base">
+                        <Link href="#" className="text-gray-500 hover:bg-linear-to-r hover:from-[#0f88c0] hover:to-emerald-400 hover:bg-clip-text hover:text-transparent transition-all duration-200">
+                            Privacy
+                        </Link>
+                        <Link href="#" className="text-gray-500 hover:bg-linear-to-r hover:from-[#0f88c0] hover:to-emerald-400 hover:bg-clip-text hover:text-transparent transition-all duration-200">
+                            Terms
+                        </Link>
+                        <Link href="#" className="text-gray-500 hover:bg-linear-to-r hover:from-[#0f88c0] hover:to-emerald-400 hover:bg-clip-text hover:text-transparent transition-all duration-200">
+                            Sitemap
+                        </Link>
                     </div>
                 </div>
             </div>

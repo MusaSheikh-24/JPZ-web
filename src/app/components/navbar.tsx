@@ -14,7 +14,7 @@ const navLinks: NavLink[] = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Services', href: '/services' },
-    { name: 'Destination', href: '/destination' },
+    { name: 'Destinations', href: '/destination' },
     { name: 'Packages', href: '/packages' },
     { name: 'Flights', href: '/flight' },
     { name: 'Contact', href: '/#contact' },
@@ -71,8 +71,8 @@ export default function Navbar() {
                                         className={`px-4 py-2 rounded-full text-[17px] font-medium transition-all duration-300
                                             
                                             ${isActive
-                                                ? 'bg-sky-500 text-white shadow-md'
-                                                : 'text-gray-700 hover:bg-sky-500 hover:text-white'
+                                                ? 'bg-linear-to-r from-[#0f88c0] to-emerald-400 text-white shadow-md shadow-emerald-500/30'
+                                                : 'text-gray-700 hover:bg-linear-to-r hover:from-[#0f88c0] hover:to-emerald-400 hover:text-white'
                                             }
                                             
                                         `}
@@ -85,22 +85,22 @@ export default function Navbar() {
                         </div>
                     </div>
 
-                    {/* Desktop CTA Button */}
+                    {/* Desktop CTA Button - Theme Updated */}
                     <div className="hidden md:flex flex-1 justify-end">
                         <Link
                             href="/flight"
-                            className="px-6 py-3 bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white text-sm font-bold rounded-full shadow-lg shadow-sky-500/30 hover:shadow-xl hover:shadow-sky-400/50 transition-all duration-300 active:scale-[0.98]"
+                            className="px-6 py-3 bg-linear-to-r from-[#0f88c0] to-emerald-400 hover:from-emerald-400 hover:to-[#0f88c0] text-white text-sm font-bold rounded-full shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-400/50 transition-all duration-300 active:scale-[0.98]"
                         >
                             Book Now
                         </Link>
                     </div>
 
-                    {/* Mobile Menu Button */}
+                    {/* Mobile Menu Button - Theme Updated */}
                     <div className="md:hidden flex items-center">
 
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="text-gray-700 hover:text-sky-500 p-2 rounded-md transition-all duration-300"
+                            className="text-gray-700 hover:text-[#0f88c0] p-2 rounded-md transition-all duration-300"
                             aria-label="Toggle navigation menu"
                             aria-expanded={isOpen}
                         >
@@ -139,7 +139,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu - Theme Updated */}
             {isOpen && (
 
                 <div className="md:hidden bg-white border-t border-gray-200 shadow-lg">
@@ -158,8 +158,8 @@ export default function Navbar() {
                                     className={`block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300
                                         
                                         ${isActive
-                                            ? 'bg-sky-500 text-white'
-                                            : 'text-gray-700 hover:bg-sky-500 hover:text-white'
+                                            ? 'bg-linear-to-r from-[#0f88c0] to-emerald-400 text-white shadow-md shadow-emerald-500/20'
+                                            : 'text-gray-700 hover:bg-linear-to-r hover:from-[#0f88c0] hover:to-emerald-400 hover:text-white'
                                         }
                                         
                                     `}
@@ -169,13 +169,13 @@ export default function Navbar() {
                             );
                         })}
 
-                        {/* Mobile CTA Button */}
+                        {/* Mobile CTA Button - Theme Updated */}
                         <div className="pt-3">
 
                             <Link
                                 href="/flight"
                                 onClick={() => setIsOpen(false)}
-                                className="block w-full text-center bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white px-5 py-3 rounded-full text-base font-bold shadow-lg shadow-sky-500/30 transition-all duration-300"
+                                className="block w-full text-center bg-linear-to-r from-[#0f88c0] to-emerald-400 hover:from-emerald-400 hover:to-[#0f88c0] text-white px-5 py-3 rounded-full text-base font-bold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-400/50 transition-all duration-300"
                             >
                                 Book Now
                             </Link>
@@ -185,6 +185,9 @@ export default function Navbar() {
                     </div>
                 </div>
             )}
+
+            {/* Bottom Accent Bar - Theme Match */}
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r from-[#0f88c0] via-emerald-400 to-[#0f88c0] opacity-60"></div>
         </nav>
     );
 }
