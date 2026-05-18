@@ -12,6 +12,12 @@ export default function AboutPage() {
     const storyRef = useInView();
     const teamRef = useInView();
 
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const stats = [
         { value: '50K+', label: 'Pilgrims Served', icon: '🕋' },
         { value: '100%', label: 'Visa Success Rate', icon: '🛂' },
@@ -89,41 +95,42 @@ export default function AboutPage() {
             <Navbar />
 
             {/* ===== HERO SECTION - Dark with Umrah Image ===== */}
-            <section className="relative h-[80vh] flex items-center justify-center overflow-hidden bg-[#0A192F]">
+            <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0">
                     <Image
                         src="https://images.unsplash.com/photo-1591604157118-b94e2684f857?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         alt="Masjid al-Haram, Makkah - Kaaba"
                         fill
                         priority
+                        sizes="100vw"
                         className="object-cover"
+                        quality={80}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                     />
-                    <div className="absolute inset-0 bg-linear-to-b from-[#0A196F]/50 via-[#0A192F]/30 to-[#0A192F]" />
+                    <div className="absolute inset-0 bg-[#0A192F]/85" />
                 </div>
 
-                <div className="relative z-10 max-w-4xl mx-auto px-4 text-center text-white">
-                    <div className="inline-flex items-center gap-2 px-5 py-2 mb-6 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                {/* Animated Glow Effects */}
+                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-[#0f88c0]/10 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl animate-pulse delay-700" />
+
+                <div className={`relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-32 transition-all duration-700 ease-out ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                    <div className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
                         <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                        <span className="text-sm font-semibold">About Our Pilgrimage Services</span>
+                        <span className="text-sm font-bold text-white">About Our Pilgrimage Services</span>
                     </div>
 
-                    <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight mb-6">
-                        About Our <br />
-                        <span className="bg-linear-to-r from-[#ffffff] to-white bg-clip-text text-transparent">Umrah & Hajj</span> Services
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight mb-6">
+                        About Our
+                        <br className="hidden sm:block" />
+                        <span className="bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">Umrah & Hajj Services</span>
                     </h1>
 
-                    <p className="text-lg md:text-xl text-gray-200 max-w-2xl mx-auto leading-relaxed mb-10">
+                    <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto ">
                         We provide complete spiritual travel solutions with visa assistance, premium accommodations near Haram, expert-guided Ziyarat, and dedicated support for every pilgrim.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <a href="/packages" className="px-8 py-4 bg-linear-to-r from-[#0f88c0] to-emerald-400 hover:from-emerald-400 hover:to-[#0f88c0] text-white font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-emerald-500/30">
-                            Explore Packages
-                        </a>
-                        <a href="/contact" className="px-8 py-4 bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/20 text-white font-bold rounded-full transition-all duration-300">
-                            Contact Us
-                        </a>
-                    </div>
                 </div>
             </section>
 
@@ -191,7 +198,7 @@ export default function AboutPage() {
 
                         <div className="absolute -bottom-8 -left-8 w-64 h-64 rounded-3xl overflow-hidden shadow-2xl shadow-emerald-900/20 group cursor-pointer hidden md:block border border-white/10">
                             <Image
-                                src="https://images.unsplash.com/photo-1542300058-b94b8ab7411b?q=80&w=800&auto=format&fit=crop"
+                                src="https://images.unsplash.com/photo-1639574326077-6cc1d8749395?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDZ8fG1ha2thaHxlbnwwfDB8MHx8fDI%3D"
                                 alt="Pilgrim Praying"
                                 fill
                                 className="object-cover group-hover:scale-105 transition-transform duration-700"

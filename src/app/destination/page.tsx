@@ -5,11 +5,13 @@ import Image from 'next/image';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 
+// 🔹 Optimized IntersectionObserver Hook
 const useInView = (threshold = 0.1) => {
     const ref = useRef<HTMLDivElement>(null);
     const [isInView, setIsInView] = useState(false);
 
     useEffect(() => {
+        if (!ref.current) return;
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
@@ -17,9 +19,12 @@ const useInView = (threshold = 0.1) => {
                     observer.disconnect();
                 }
             },
-            { threshold }
+            {
+                threshold,
+                rootMargin: '0px 0px 100px 0px' // Cards 100px pehle trigger
+            }
         );
-        if (ref.current) observer.observe(ref.current);
+        observer.observe(ref.current);
         return () => observer.disconnect();
     }, [threshold]);
 
@@ -28,97 +33,151 @@ const useInView = (threshold = 0.1) => {
 
 export default function DestinationsPage() {
     const gridRef = useInView();
-    const [activeContinent, setActiveContinent] = useState('All');
-    const continents = ['All', 'Asia', 'Europe', 'Middle East', 'Americas', 'Africa', 'Oceania'];
+    const [activeCategory, setActiveCategory] = useState('All');
+    const [isMounted, setIsMounted] = useState(false);
 
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const categories = ['All', 'Holy Cities', 'Historical Sites', 'Ziyarat Locations', 'Nearby Cities'];
+
+    // ✅ FIXED: Pexels images optimized with quality & format
     const destinations = [
         {
-            name: 'Dubai',
-            country: 'UAE',
-            continent: 'Middle East',
-            image: 'https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=870&auto=format&fit=crop',
-            bestTime: 'Oct - Feb',
-            tags: ['Luxury', 'Desert', 'Modern'],
-            temp: '25°C - 35°C',
-            description: 'Where futuristic architecture meets Arabian heritage'
+            name: 'Makkah',
+            subtitle: 'Masjid al-Haram',
+            category: 'Holy Cities',
+            image: 'https://images.unsplash.com/photo-1591604157118-b94e2684f857?w=800&q=80&auto=format&fit=crop',
+            bestTime: 'Year Round',
+            tags: ['Kaaba', 'Hajj', 'Umrah'],
+            distance: 'Center',
+            description: 'The holiest city in Islam'
         },
         {
-            name: 'Bali',
-            country: 'Indonesia',
-            continent: 'Asia',
-            image: 'https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?q=80&w=870&auto=format&fit=crop',
-            bestTime: 'Apr - Oct',
-            tags: ['Beach', 'Culture', 'Nature'],
-            temp: '24°C - 30°C',
-            description: 'Tropical paradise with ancient temples'
+            name: 'Madinah',
+            subtitle: 'Masjid an-Nabawi',
+            category: 'Holy Cities',
+            image: 'https://images.unsplash.com/photo-1551041777-575d3855ca71?w=800&q=80&auto=format&fit=crop',
+            bestTime: 'Year Round',
+            tags: ["Prophet's Mosque", 'Ziyarat', 'Peace'],
+            distance: '340 km from Makkah',
+            description: 'City of the Prophet ﷺ'
         },
         {
-            name: 'Paris',
-            country: 'France',
-            continent: 'Europe',
-            image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&auto=format&fit=crop',
-            bestTime: 'Mar - Jun',
-            tags: ['Romance', 'Art', 'History'],
-            temp: '8°C - 25°C',
-            description: 'The city of love and timeless elegance'
-        },
-        {
-            name: 'Tokyo',
-            country: 'Japan',
-            continent: 'Asia',
-            image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&auto=format&fit=crop',
-            bestTime: 'Mar - May',
-            tags: ['Modern', 'Culture', 'Food'],
-            temp: '5°C - 30°C',
-            description: 'Ancient traditions meet cutting-edge innovation'
-        },
-        {
-            name: 'New York',
-            country: 'USA',
-            continent: 'Americas',
-            image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&auto=format&fit=crop',
-            bestTime: 'Apr - Jun',
-            tags: ['Urban', 'Culture', 'Nightlife'],
-            temp: '0°C - 29°C',
-            description: 'The city that never sleeps'
-        },
-        {
-            name: 'Cape Town',
-            country: 'South Africa',
-            continent: 'Africa',
-            image: 'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?w=600&auto=format&fit=crop',
+            name: 'Jeddah',
+            subtitle: 'Gateway to Makkah',
+            category: 'Nearby Cities',
+            image: 'https://images.unsplash.com/photo-1586715065342-98d1f6016fd1?w=800&q=80&auto=format&fit=crop',
             bestTime: 'Nov - Mar',
-            tags: ['Nature', 'Adventure', 'Wine'],
-            temp: '12°C - 28°C',
-            description: 'Where mountains meet the ocean'
+            tags: ['Airport', 'Shopping', 'Red Sea'],
+            distance: '80 km from Makkah',
+            description: 'Main entry point for pilgrims'
         },
         {
-            name: 'Sydney',
-            country: 'Australia',
-            continent: 'Oceania',
-            image: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            bestTime: 'Sep - Nov',
-            tags: ['Beach', 'Urban', 'Nature'],
-            temp: '8°C - 26°C',
-            description: 'Iconic harbor city with coastal beauty'
+            name: 'Jabal al-Nour',
+            subtitle: 'Cave of Hira',
+            category: 'Historical Sites',
+            // ✅ Pexels optimized - reduced quality & added format
+            image: 'https://images.pexels.com/photos/12613484/pexels-photo-12613484.jpeg?auto=compress&cs=tinysrgb&w=800&q=60',
+            bestTime: 'Early Morning',
+            tags: ['First Revelation', 'Mountain', 'Spiritual'],
+            distance: '4 km from Makkah',
+            description: 'Where Prophet Muhammad ﷺ received first revelation'
         },
         {
-            name: 'Santorini',
-            country: 'Greece',
-            continent: 'Europe',
-            image: 'https://images.unsplash.com/photo-1687786071688-a92e6bdbefc5?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            bestTime: 'Apr - Oct',
-            tags: ['Romance', 'Beach', 'Views'],
-            temp: '10°C - 28°C',
-            description: 'Stunning sunsets and white-washed villages'
+            name: 'Jabal Thawr',
+            subtitle: 'Cave of Thawr',
+            category: 'Historical Sites',
+            // ✅ Pexels optimized
+            image: 'https://images.pexels.com/photos/32727335/pexels-photo-32727335.jpeg?auto=compress&cs=tinysrgb&w=800&q=60',
+            bestTime: 'Morning',
+            tags: ['Hijrah', 'Historic Cave', 'Mountain'],
+            distance: 'South of Makkah',
+            description: 'Where Prophet ﷺ took refuge during Hijrah'
+        },
+        {
+            name: 'Mina',
+            subtitle: 'City of Tents',
+            category: 'Ziyarat Locations',
+            // ✅ Pexels optimized
+            image: 'https://images.pexels.com/photos/8865389/pexels-photo-8865389.jpeg?auto=compress&cs=tinysrgb&w=800&q=60',
+            bestTime: 'Hajj Season',
+            tags: ['Hajj Rites', 'Jamarat', 'Tents'],
+            distance: '8 km from Makkah',
+            description: 'Essential Hajj site'
+        },
+        {
+            name: 'Arafat',
+            subtitle: 'Mount of Mercy',
+            category: 'Ziyarat Locations',
+            // ✅ Pexels optimized
+            image: 'https://images.pexels.com/photos/12765598/pexels-photo-12765598.jpeg?auto=compress&cs=tinysrgb&w=800&q=60',
+            bestTime: '9th Dhul Hijjah',
+            tags: ['Day of Arafah', 'Hajj Peak', 'Dua'],
+            distance: '20 km from Makkah',
+            description: 'Most important Hajj site'
+        },
+        {
+            name: 'Muzdalifah',
+            subtitle: 'Open-Air Sanctuary',
+            category: 'Ziyarat Locations',
+            // ✅ Pexels optimized
+            image: 'https://images.pexels.com/photos/12364274/pexels-photo-12364274.jpeg?auto=compress&cs=tinysrgb&w=800&q=60',
+            bestTime: 'Night of 10th Dhul Hijjah',
+            tags: ['Overnight Stay', 'Pebbles Collection', 'Hajj'],
+            distance: 'Between Mina & Arafat',
+            description: 'Where pilgrims collect pebbles'
+        },
+        {
+            name: 'Quba Mosque',
+            subtitle: 'First Mosque in Islam',
+            category: 'Historical Sites',
+            // ✅ Pexels optimized
+            image: 'https://images.pexels.com/photos/30651382/pexels-photo-30651382.jpeg?auto=compress&cs=tinysrgb&w=800&q=60',
+            bestTime: 'Saturday Morning',
+            tags: ['Sunnah Prayer', 'Historic', 'Madinah'],
+            distance: '3 km from Masjid Nabawi',
+            description: 'First mosque built by Prophet ﷺ'
+        },
+        {
+            name: 'Mount Uhud',
+            subtitle: 'Battle of Uhud Site',
+            category: 'Historical Sites',
+            // ✅ Pexels optimized
+            image: 'https://images.pexels.com/photos/12607980/pexels-photo-12607980.jpeg?auto=compress&cs=tinysrgb&w=800&q=60',
+            bestTime: 'Morning',
+            tags: ['Martyrs', 'Battle Site', 'History'],
+            distance: '4 km from Madinah',
+            description: 'Site of Battle of Uhud'
+        },
+        {
+            name: 'Taif',
+            subtitle: 'City of Roses',
+            category: 'Nearby Cities',
+            image: 'https://images.unsplash.com/photo-1729817901796-11a32e72bba3?w=800&q=80&auto=format&fit=crop',
+            bestTime: 'Summer',
+            tags: ['Cool Climate', 'Roses', 'Fruits'],
+            distance: '88 km from Makkah',
+            description: 'Mountain retreat with cool climate'
+        },
+        {
+            name: 'Yanbu',
+            subtitle: 'Red Sea Coast',
+            category: 'Nearby Cities',
+            image: 'https://images.unsplash.com/photo-1674979724846-d650cba04a11?w=800&q=80&auto=format&fit=crop',
+            bestTime: 'Oct - Apr',
+            tags: ['Beach', 'History', 'Peaceful'],
+            distance: '300 km from Madinah',
+            description: 'Historic port city on Red Sea'
         }
     ];
 
     const filteredDestinations = useMemo(() => {
-        return activeContinent === 'All'
+        return activeCategory === 'All'
             ? destinations
-            : destinations.filter(d => d.continent === activeContinent);
-    }, [activeContinent]);
+            : destinations.filter(d => d.category === activeCategory);
+    }, [activeCategory]);
 
     return (
         <div className="w-full bg-white text-gray-700">
@@ -128,107 +187,119 @@ export default function DestinationsPage() {
             <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0">
                     <Image
-                        src="https://images.unsplash.com/photo-1569839333583-7375336cde4b?q=80&w=1030&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Travel Destinations"
+                        src="https://images.unsplash.com/photo-1591604157118-b94e2684f857?w=1200&q=80&auto=format&fit=crop"
+                        alt="Masjid al-Haram, Makkah"
                         fill
                         className="object-cover"
                         sizes="100vw"
                         priority
+                        quality={80}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                     />
-                    <div className="absolute inset-0 bg-[#0A192F]/85"></div>
+                    <div className="absolute inset-0 bg-[#0A192F]/85" />
                 </div>
 
-                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-150 h-150 bg-[#0f88c0]/10 rounded-full blur-3xl animate-pulse"></div>
+                {/* ✅ Fixed: Using standard Tailwind sizes */}
+                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-[#0f88c0]/10 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl animate-pulse delay-700" />
 
-                <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-32">
-                    <div className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 bg-white/10 backdrop-blur-sm rounded-full border border-white/15 cursor-pointer hover:bg-white/20 transition-all duration-300">
-                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                        <span className="text-sm font-bold text-white">140+ Destinations Worldwide</span>
+                <div className={`relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-32 transition-all duration-700 ease-out ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                    <div className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
+                        <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                        <span className="text-sm font-bold text-white">🕋 Sacred Destinations</span>
                     </div>
 
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight mb-6">
-                        Discover Your Next
+                        Explore Holy Sites &
                         <br className="hidden sm:block" />
-                        Dream Destination
+                        <span className="bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">
+                            Ziyarat Locations
+                        </span>
                     </h1>
 
                     <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto">
-                        From serene beaches to vibrant cities, explore handpicked locations across 6 continents.
-                        Your perfect getaway is just one click away.
+                        Discover the blessed cities of Makkah and Madinah,
+                        historical Islamic sites, and essential pilgrimage
+                        locations for a spiritually enriching journey.
                     </p>
                 </div>
             </section>
 
-            {/* ===== CONTINENT FILTER ===== */}
-            <section className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 py-4">
+            {/* ===== CATEGORY FILTER ===== */}
+            <section className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                        {continents.map((continent) => (
+                        {categories.map((category) => (
                             <button
-                                key={continent}
-                                onClick={() => setActiveContinent(continent)}
-                                className={`px-6 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300 cursor-pointer ${activeContinent === continent
-                                    ? 'bg-[#0f88c0] text-white shadow-lg shadow-sky-500/30'
+                                key={category}
+                                onClick={() => setActiveCategory(category)}
+                                className={`px-6 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300 cursor-pointer ${activeCategory === category
+                                    ? 'bg-linear-to-r from-[#0f88c0] to-emerald-400 text-white shadow-lg shadow-emerald-500/30'
                                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                    }`}
+                                    } hover:scale-105 active:scale-95`}
                             >
-                                {continent}
+                                {category}
                             </button>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* ===== DESTINATIONS GRID - MINIMAL & AIRY ===== */}
+            {/* ===== DESTINATIONS GRID ===== */}
             <section ref={gridRef.ref} className="relative py-20 overflow-hidden bg-linear-to-b from-white via-sky-50/30 to-white">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-[#0f88c0]/5 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-sky-300/10 rounded-full blur-3xl"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#0f88c0]/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl" />
 
                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-700 ${gridRef.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+                    <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-700 ease-out ${gridRef.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                         {filteredDestinations.map((dest, index) => (
                             <div
                                 key={dest.name}
-                                className={`group relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-lg shadow-gray-200/30 hover:shadow-2xl hover:shadow-gray-400/40 transition-all duration-500 hover:-translate-y-2 cursor-pointer ${gridRef.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
-                                style={{ transitionDelay: `${index * 100}ms` }}
+                                className={`group relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-lg shadow-gray-200/30 hover:shadow-2xl hover:shadow-emerald-400/20 transition-all duration-500 ease-out hover:-translate-y-2 cursor-pointer will-change-transform ${gridRef.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                                    }`}
+                                style={{
+                                    transitionDelay: `${index * 50}ms`,
+                                    transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)'
+                                }}
                             >
-                                {/* Large Image - 60% of card */}
-                                <div className="relative h-80 overflow-hidden">
+                                {/* ✅ FIXED: Optimized image container */}
+                                <div className="relative h-72 overflow-hidden bg-gray-100">
                                     <Image
                                         src={dest.image}
                                         alt={dest.name}
                                         fill
-                                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        loading={index < 3 ? 'eager' : 'lazy'}
+                                        priority={index === 0}
+                                        quality={dest.image.includes('pexels.com') ? 60 : 80} // Pexels ko kam quality
+                                        placeholder="blur"
+                                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                                     />
-                                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent"></div>
+                                    <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
 
-                                    {/* Location Badge */}
                                     <div className="absolute top-4 left-4">
                                         <span className="px-3 py-1.5 bg-white/95 backdrop-blur-sm rounded-full text-xs font-bold text-[#0A192F]">
-                                            {dest.country}
+                                            {dest.category}
                                         </span>
                                     </div>
 
-                                    {/* Destination Name Overlay */}
                                     <div className="absolute bottom-4 left-6 right-6">
-                                        <h3 className="text-3xl font-black text-white mb-1">{dest.name}</h3>
-                                        <p className="text-white/90 text-sm">{dest.description}</p>
+                                        <h3 className="text-2xl font-black text-white mb-1">{dest.name}</h3>
+                                        <p className="text-white/90 text-sm">{dest.subtitle}</p>
                                     </div>
                                 </div>
 
-                                {/* Info Section - Minimal & Clean */}
                                 <div className="p-6">
-                                    {/* Tags */}
                                     <div className="flex flex-wrap gap-2 mb-4">
-                                        {dest.tags.map((tag, i) => (
-                                            <span key={i} className="px-3 py-1 bg-[#0f88c0]/10 text-[#0f88c0] text-xs font-bold rounded-full">
+                                        {dest.tags.map((tag) => (
+                                            <span key={tag} className="px-3 py-1 bg-[#0f88c0]/10 text-[#0f88c0] text-xs font-bold rounded-full">
                                                 {tag}
                                             </span>
                                         ))}
                                     </div>
 
-                                    {/* Best Time & Weather */}
                                     <div className="flex items-center justify-between mb-6 pb-6 border-b border-gray-100">
                                         <div className="flex items-center gap-2">
                                             <svg className="w-5 h-5 text-[#0f88c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -237,17 +308,20 @@ export default function DestinationsPage() {
                                             <span className="text-sm text-gray-600 font-medium">{dest.bestTime}</span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                             </svg>
-                                            <span className="text-sm text-gray-600 font-medium">{dest.temp}</span>
+                                            <span className="text-sm text-gray-600 font-medium">{dest.distance}</span>
                                         </div>
                                     </div>
 
-                                    {/* Explore Button */}
-                                    <Link href={`/destination/${dest.name.toLowerCase().replace(/\s+/g, '-')}`} className="w-full py-3.5 bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-bold text-base rounded-full shadow-lg shadow-sky-500/30 hover:shadow-xl hover:shadow-sky-400/50 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer group/btn">
-                                        <span>Explore Destination</span>
-                                        <svg className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <Link
+                                        href={`/destination/${dest.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                        className="w-full py-3.5 bg-linear-to-r from-[#0f88c0] to-emerald-400 hover:from-emerald-400 hover:to-[#0f88c0] text-white font-bold text-base rounded-full shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-400/50 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2"
+                                    >
+                                        <span>Explore Location</span>
+                                        <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </Link>
@@ -260,31 +334,45 @@ export default function DestinationsPage() {
 
             {/* ===== CTA SECTION ===== */}
             <section className="relative py-24 bg-[#0A192F] overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#112240_0%,#0A192F_70%)]"></div>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-100 bg-[#0f88c0]/10 rounded-full blur-3xl"></div>
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#112240_0%,#0A192F_70%)]" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-64 bg-[#0f88c0]/10 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl" />
 
                 <div className="relative max-w-4xl mx-auto px-4 text-center">
                     <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-6 bg-white/10 backdrop-blur-sm rounded-full border border-white/10">
-                        <span className="text-xl">✈️</span>
-                        <span className="text-base font-bold text-[#0f88c0]">Ready to Fly?</span>
+                        <span className="text-xl">🕋</span>
+                        <span className="text-base font-bold bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">
+                            Ready for Your Journey?
+                        </span>
                     </span>
 
                     <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
-                        Your Next Adventure <span className="bg-linear-to-r from-[#0f88c0] to-sky-400 bg-clip-text text-transparent">Starts Today</span>
+                        Begin Your Sacred
+                        <span className="bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">
+                            {' '}Pilgrimage
+                        </span>
                     </h2>
 
                     <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-10">
-                        Let our travel experts plan your dream vacation. Get a customized itinerary and exclusive deals delivered to your inbox.
+                        Let us guide you to these blessed destinations with
+                        complete visa support, premium accommodations, and
+                        expert-guided Ziyarat tours.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Link href="/packages" className="w-full sm:w-auto px-10 py-4 bg-linear-to-r from-[#0f88c0] to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-bold text-lg rounded-full shadow-xl shadow-sky-500/30 hover:shadow-xl hover:shadow-sky-400/50 active:scale-[0.98] flex items-center justify-center gap-3 cursor-pointer transition-all duration-300">
+                        <Link
+                            href="/packages"
+                            className="w-full sm:w-auto px-10 py-4 bg-linear-to-r from-[#0f88c0] to-emerald-400 hover:from-emerald-400 hover:to-[#0f88c0] text-white font-bold text-lg rounded-full shadow-xl shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-400/50 active:scale-[0.98] flex items-center justify-center gap-3 transition-all duration-300"
+                        >
                             View Packages
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>
                         </Link>
-                        <Link href="/contact" className="w-full sm:w-auto px-10 py-4 bg-white/10 hover:bg-white/20 text-white font-bold text-lg rounded-full border border-white/20 backdrop-blur-sm transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer">
+                        <Link
+                            href="/contact"
+                            className="w-full sm:w-auto px-10 py-4 bg-white/10 hover:bg-white/20 text-white font-bold text-lg rounded-full border border-white/20 backdrop-blur-sm transition-all duration-300"
+                        >
                             Contact Experts
                         </Link>
                     </div>

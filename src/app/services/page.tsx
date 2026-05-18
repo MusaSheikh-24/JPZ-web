@@ -9,12 +9,17 @@ import { useInView } from '../hooks/useInView';
 export default function ServicesPage() {
     const statsRef = useInView();
     const servicesRef = useInView();
+    const [isMounted, setIsMounted] = useState(false);
     const [animatedStats, setAnimatedStats] = useState({
         pilgrims: 0,
         visas: 0,
         hotels: 0,
         satisfaction: 0
     });
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     // Animate stats on scroll
     useEffect(() => {
@@ -135,57 +140,66 @@ export default function ServicesPage() {
         <div className="w-full">
             <Navbar />
 
-            {/* ===== HERO SECTION - Dark with Umrah Image ===== */}
-            <section className="relative h-[80vh] flex items-center justify-center overflow-hidden bg-[#0A192F]">
+            {/* ===== HERO SECTION - Same as Destinations Page ===== */}
+            <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0">
                     <Image
-                        src="https://images.unsplash.com/photo-1693590614566-1d3ea9ef32f7?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Masjid al-Haram, Makkah - Kaaba"
+                        src="https://images.unsplash.com/photo-1591604157118-b94e2684f857?w=1200&q=80&auto=format&fit=crop"
+                        alt="Masjid al-Haram, Makkah"
                         fill
-                        priority
                         className="object-cover"
+                        sizes="100vw"
+                        priority
+                        quality={80}
                     />
-                    <div className="absolute inset-0 bg-linear-to-b from-[#0A196F]/70 via-[#0A192F]/50 to-[#0A192F]" />
+                    <div className="absolute inset-0 bg-[#0A192F]/85" />
                 </div>
 
-                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-150 h-150 bg-[#0f88c0]/10 rounded-full blur-3xl animate-pulse"></div>
+                {/* Animated Glow Effects - Same as Destinations */}
+                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-[#0f88c0]/10 rounded-full blur-3xl animate-pulse" />
+                <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl animate-pulse delay-700" />
 
-                <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-32">
-                    <div className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 bg-white/10 backdrop-blur-sm rounded-full border border-white/15 cursor-pointer hover:bg-white/20 transition-all duration-300">
-                        <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                        <span className="text-sm font-bold text-white">Premium Pilgrimage Services</span>
+                <div className={`relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-32 transition-all duration-700 ease-out ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                    <div className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
+                        <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                        <span className="text-sm font-bold text-white">💼 Premium Pilgrimage Services</span>
                     </div>
 
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight mb-6">
                         Everything You Need for
-                        <br className="hidden md:block" />
-                        Sacred Journey
+                        <br className="hidden sm:block" />
+                        <span className="bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">
+                            Sacred Journey
+                        </span>
                     </h1>
 
-                    <p className="text-lg md:text-xl text-gray-200 leading-relaxed max-w-2xl mx-auto">
-                        Complete Umrah & Hajj services with visa assistance, premium hotels, guided Ziyarat, and 24/7 support.
+                    <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-2xl mx-auto">
+                        Complete Umrah & Hajj services with visa assistance, premium hotels,
+                        guided Ziyarat, and 24/7 support for a spiritually fulfilling pilgrimage.
                     </p>
                 </div>
             </section>
 
             {/* ===== SERVICES GRID - WHITE BACKGROUND ===== */}
             <section ref={servicesRef.ref} className="relative py-24 bg-white">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-[#0f88c0]/5 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-400/5 rounded-full blur-3xl"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-[#0f88c0]/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-emerald-400/5 rounded-full blur-3xl" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center mb-16">
                         <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-6 bg-[#0A192F]/5 rounded-full border border-[#0A192F]/10">
                             <span className="text-xl">💼</span>
-                            <span className="text-base font-bold bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">What We Offer</span>
+                            <span className="text-base font-bold bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">
+                                What We Offer
+                            </span>
                         </span>
                         <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#0A192F] mb-5">
-                            Our{'  '}
+                            Our{' '}
                             <span className="relative inline-block">
                                 <span className="bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">
                                     Services
                                 </span>
-                                <span className="absolute -bottom-1 left-0 w-full h-1 bg-linear-to-r from-[#0f88c0] to-emerald-400 rounded-full"></span>
+                                <span className="absolute -bottom-1 left-0 w-full h-1 bg-linear-to-r from-[#0f88c0] to-emerald-400 rounded-full" />
                             </span>
                         </h2>
                         <p className="mt-4 text-gray-500 max-w-xl mx-auto text-lg">
@@ -201,7 +215,7 @@ export default function ServicesPage() {
                                 style={{ transitionDelay: `${index * 100}ms` }}
                             >
                                 {/* Gradient Glow on Hover */}
-                                <div className={`absolute -inset-1 bg-linear-to-br ${service.color} rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-xl`}></div>
+                                <div className={`absolute -inset-1 bg-linear-to-br ${service.color} rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-500 blur-xl`} />
 
                                 {/* Card Content */}
                                 <div className="relative z-10">
@@ -248,7 +262,7 @@ export default function ServicesPage() {
             {/* ===== TRUST / STATS SECTION - BLUE BACKGROUND ===== */}
             <section ref={statsRef.ref} className="bg-[#0A192F] py-24 relative overflow-hidden">
                 <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-200 h-100 bg-[#0f88c0]/10 rounded-full blur-3xl"></div>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-64 bg-[#0f88c0]/10 rounded-full blur-3xl" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center mb-12">
@@ -293,7 +307,9 @@ export default function ServicesPage() {
                         <div>
                             <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-6 bg-[#0A192F]/5 rounded-full border border-[#0A192F]/10">
                                 <span className="text-xl">✨</span>
-                                <span className="text-base font-bold bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">Why Choose Us</span>
+                                <span className="text-base font-bold bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">
+                                    Why Choose Us
+                                </span>
                             </span>
                             <h2 className="text-4xl sm:text-5xl font-black text-[#0A192F] mb-6">
                                 We Make Your{' '}
@@ -327,13 +343,13 @@ export default function ServicesPage() {
                         </div>
 
                         <div className="relative">
-                            <div className="absolute -inset-4 bg-linear-to-r from-[#0f88c0] to-emerald-400 rounded-3xl opacity-20 blur-2xl"></div>
+                            <div className="absolute -inset-4 bg-linear-to-r from-[#0f88c0] to-emerald-400 rounded-3xl opacity-20 blur-2xl" />
                             <Image
-                                src="https://images.unsplash.com/photo-1673716636063-78fea250658a?q=80&w=435&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                src="https://images.pexels.com/photos/34246980/pexels-photo-34246980.jpeg"
                                 alt="Masjid al-Haram"
                                 width={800}
                                 height={600}
-                                className="relative rounded-2xl shadow-2xl w-full object-cover h-150"
+                                className="relative rounded-2xl shadow-2xl w-full object-cover h-112"
                             />
 
                             {/* Floating Stats Card */}
@@ -359,12 +375,12 @@ export default function ServicesPage() {
 
                 <div className="max-w-6xl mx-auto relative rounded-3xl overflow-hidden">
                     {/* Animated Blobs */}
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl animate-pulse"></div>
-                    <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#0f88c0]/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+                    <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl animate-pulse" />
+                    <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#0f88c0]/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
 
                     <div className="relative z-10 p-12 md:p-20 text-center">
                         <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
-                            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
                             <span className="text-base font-bold text-white">Begin Your Journey</span>
                         </span>
 

@@ -16,7 +16,7 @@ const navLinks: NavLink[] = [
     { name: 'Services', href: '/services' },
     { name: 'Destinations', href: '/destination' },
     { name: 'Packages', href: '/packages' },
-    { name: 'Flights', href: '/flight' },
+
     { name: 'Contact', href: '/#contact' },
 ];
 
