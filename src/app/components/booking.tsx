@@ -144,7 +144,7 @@ export default function UmrahJourneySection() {
                             <p className="text-sm text-gray-500">Our Umrah experts are here to help you every step of the way.</p>
                         </div>
                         <Link
-                            href="/contact"
+                            href="/#contact"
                             className="px-8 py-3 bg-linear-to-r from-[#0f88c0] to-emerald-400 hover:from-emerald-400 hover:to-[#0f88c0] text-white font-bold rounded-full shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-400/50 transition-all duration-300 active:scale-[0.98] cursor-pointer"
                         >
                             Get Free Consultation

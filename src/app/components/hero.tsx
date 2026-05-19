@@ -42,7 +42,7 @@ export default function Hero() {
                     <span className="text-sm font-bold text-white">🕋 Trusted by 50000+ pilgrims worldwide</span>
                 </div>
 
-                {/* Heading */}``
+                {/* Heading */}
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight mb-6">
                     Your Trusted Partner <br />
                     <span className="bg-linear-to-r from-[#0f88c0] to-emerald-400 bg-clip-text text-transparent">
@@ -66,7 +66,7 @@ export default function Hero() {
                         Explore Packages
                     </Link>
                     <Link
-                        href="/contact"
+                        href="/#contact"
                         className="px-10 py-4 bg-white/10 backdrop-blur-md hover:bg-white/20 border border-white/20 text-white font-bold rounded-full transition-all duration-300"
                     >
                         Contact Us

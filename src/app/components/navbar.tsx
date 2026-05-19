@@ -88,7 +88,7 @@ export default function Navbar() {
                     {/* Desktop CTA Button - Theme Updated */}
                     <div className="hidden md:flex flex-1 justify-end">
                         <Link
-                            href="/flight"
+                            href="/packages"
                             className="px-6 py-3 bg-linear-to-r from-[#0f88c0] to-emerald-400 hover:from-emerald-400 hover:to-[#0f88c0] text-white text-sm font-bold rounded-full shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-400/50 transition-all duration-300 active:scale-[0.98]"
                         >
                             Book Now
@@ -173,7 +173,7 @@ export default function Navbar() {
                         <div className="pt-3">
 
                             <Link
-                                href="/flight"
+                                href="/packages"
                                 onClick={() => setIsOpen(false)}
                                 className="block w-full text-center bg-linear-to-r from-[#0f88c0] to-emerald-400 hover:from-emerald-400 hover:to-[#0f88c0] text-white px-5 py-3 rounded-full text-base font-bold shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-400/50 transition-all duration-300"
                             >

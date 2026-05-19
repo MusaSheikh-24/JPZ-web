@@ -34,57 +34,48 @@ export default function Footer() {
             items: [
                 { label: 'Umrah Packages', href: '/packages#umrah' },
                 { label: 'Hajj Packages', href: '/packages#hajj' },
-                { label: 'Visa Assistance', href: '/services/visa' },
-                { label: 'Ziyarat Tours', href: '/services/ziyarat' },
+                { label: 'Visa & Ziyarat', href: '/services' },
             ]
         },
         {
-            title: 'Pilgrimage Info',
+            title: 'Resources',
             items: [
-                { label: 'Umrah Guide', href: '/guide/umrah' },
-                { label: 'Hajj Steps', href: '/guide/hajj' },
-                { label: 'Dua & Prayers', href: '/guide/duas' },
-                { label: 'Packing Checklist', href: '/guide/packing' },
+                { label: 'Pilgrimage Guide', href: '/guidance' },
+                { label: 'Health & Safety', href: '/guidance' },
+                { label: 'Packing List', href: '/guidance' },
             ]
         },
         {
             title: 'Holy Cities',
             items: [
-                { label: 'Makkah Hotels', href: '/hotels/makkah' },
-                { label: 'Madinah Hotels', href: '/hotels/madinah' },
-                { label: 'Jeddah Transfers', href: '/transport/jeddah' },
-                { label: 'Haram Distance Map', href: '/info/haram-map' },
+                { label: 'Hotels', href: '/hotels' },
+                { label: 'Transport', href: '/transport' },
             ]
         },
         {
             title: 'Support',
             items: [
-                { label: 'Contact Us', href: '/contact' },
-                { label: 'FAQs', href: '/faq' },
-                { label: '24/7 Helpline', href: '/support' },
-                { label: 'Track Booking', href: '/track' },
+                { label: 'Contact Us', href: '/#contact' },
+
+                { label: 'Track Booking', href: '/guidance#track-booking' },
             ]
         },
     ];
 
-    const legalLinks = [
-        { label: 'Privacy Policy', href: '/privacy' },
-        { label: 'Terms of Service', href: '/terms' },
-        { label: 'Refund Policy', href: '/refund' },
-        { label: 'Scholarly Guidance', href: '/scholars' },
-    ];
-
     return (
-        <footer className="bg-[#0A192F] text-white relative">
-            {/* Top Gradient Line */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-[#0f88c0]/60 to-transparent" />
+        <footer className="bg-[#0A192F] text-white relative overflow-hidden">
+            {/* Decorative Elements */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-transparent via-[#0f88c0] to-emerald-400" />
+            <div className="absolute top-20 left-10 w-32 h-32 bg-[#0f88c0]/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-20 right-10 w-40 h-40 bg-emerald-400/5 rounded-full blur-3xl" />
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative">
+                {/* Main Footer Content */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
-                    {/* Brand Column */}
-                    <div className="md:col-span-5 lg:col-span-4">
-                        <Link href="/" className="inline-block mb-6 relative w-40 h-20">
+                    {/* Brand Section */}
+                    <div className="lg:col-span-4 space-y-5">
+                        <Link href="/" className="inline-block relative w-36 h-16">
                             <Image
                                 src="/logo.png.png"
                                 alt="Umrah Hajj Travel Logo"
@@ -94,27 +85,22 @@ export default function Footer() {
                             />
                         </Link>
 
-                        <p className="text-gray-400 text-base leading-relaxed mb-6 max-w-sm">
+                        <p className="text-gray-400 text-sm leading-relaxed">
                             Your trusted partner for spiritually fulfilling Umrah & Hajj journeys.
-                            Complete visa support, premium Haram-proximity hotels, and authentic
-                            guided Ziyarat — all with 24/7 dedicated assistance.
+                            Complete visa support, premium hotels, and guided Ziyarat.
                         </p>
 
-                        {/* Social Links */}
-                        <div className="flex gap-3">
+                        {/* Social Links - Compact */}
+                        <div className="flex gap-2">
                             {socialLinks.map((social) => (
                                 <Link
                                     key={social.name}
                                     href={social.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    aria-label={social.name}
-                                    className="group w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-gray-400 hover:border-transparent hover:scale-105 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0f88c0] relative overflow-hidden"
+                                    className="group w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 border border-white/10 text-gray-400 hover:border-[#0f88c0] hover:text-white hover:scale-110 transition-all duration-300"
                                 >
-                                    {/* Gradient Background on Hover */}
-                                    <span className="absolute inset-0 bg-linear-to-r from-[#0f88c0] to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                    {/* Icon */}
-                                    <svg className="relative w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                         <path d={social.path} />
                                     </svg>
                                 </Link>
@@ -122,31 +108,30 @@ export default function Footer() {
                         </div>
 
                         {/* Trust Badges */}
-                        <div className="mt-8 flex flex-wrap gap-3">
-                            <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-400/10 border border-emerald-400/30 rounded-full text-xs text-emerald-300">
-                                ✅ Ministry Approved
+                        <div className="flex flex-wrap gap-2">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-400/10 border border-emerald-400/30 rounded-lg text-xs text-emerald-300">
+                                ✓ Ministry Approved
                             </span>
-                            <span className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#0f88c0]/10 border border-[#0f88c0]/30 rounded-full text-xs text-[#0f88c0]">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#0f88c0]/10 border border-[#0f88c0]/30 rounded-lg text-xs text-[#0f88c0]">
                                 🕋 50K+ Pilgrims
                             </span>
                         </div>
                     </div>
 
-                    {/* Links Grid */}
-                    <div className="md:col-span-7 lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
+                    {/* Links Grid - Aligned & Compact */}
+                    <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-6">
                         {footerLinks.map((section) => (
                             <div key={section.title}>
-                                <h4 className="font-semibold text-gray-200 mb-4 text-sm uppercase tracking-wide">
+                                <h4 className="font-bold text-white mb-3 text-sm uppercase tracking-wide">
                                     {section.title}
                                 </h4>
-                                <ul className="space-y-3.5">
+                                <ul className="space-y-2">
                                     {section.items.map((item) => (
                                         <li key={item.label}>
                                             <Link
                                                 href={item.href}
-                                                className="group flex items-center gap-2 text-base text-gray-400 hover:text-transparent hover:bg-linear-to-r hover:from-[#0f88c0] hover:to-emerald-400 hover:bg-clip-text transition-all duration-200"
+                                                className="text-sm text-gray-400 hover:text-[#0f88c0] transition-colors duration-200 inline-block"
                                             >
-                                                <span className="w-0 group-hover:w-1.5 h-0.5 bg-linear-to-r from-[#0f88c0] to-emerald-400 transition-all duration-200 rounded-full" />
                                                 {item.label}
                                             </Link>
                                         </li>
@@ -157,31 +142,26 @@ export default function Footer() {
                     </div>
                 </div>
 
-                {/* Bottom Row */}
-                <div className="mt-16 pt-8 border-t border-white/10 flex flex-col lg:flex-row items-center justify-between gap-4">
-                    <p className="text-base text-gray-500 text-center lg:text-left">
-                        © {year} Sacred Journeys. All rights reserved. <br className="sm:hidden" />
-                        <span className="text-gray-600">Serving pilgrims with sincerity & care.</span>
+                {/* Bottom Bar - Compact */}
+                <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <p className="text-sm text-gray-500 text-center sm:text-left">
+                        © {year} Sacred Journeys. All rights reserved.
                     </p>
 
-                    <div className="flex flex-wrap justify-center gap-4 sm:gap-6 text-base">
-                        {legalLinks.map((link) => (
-                            <Link
-                                key={link.label}
-                                href={link.href}
-                                className="text-gray-500 hover:bg-linear-to-r hover:from-[#0f88c0] hover:to-emerald-400 hover:bg-clip-text hover:text-transparent transition-all duration-200"
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
+                    <div className="flex gap-5 text-sm">
+                        <Link href="/privacy" className="text-gray-500 hover:text-[#0f88c0] transition-colors">
+                            Privacy
+                        </Link>
+                        <Link href="/terms-conditions" className="text-gray-500 hover:text-[#0f88c0] transition-colors">
+                            Terms & Conditions
+                        </Link>
                     </div>
                 </div>
 
-                {/* Islamic Footer Note */}
-                <div className="mt-8 text-center">
-                    <p className="text-sm text-gray-600 italic">
-                        "And proclaim to the people the Hajj [pilgrimage]; they will come to you on foot and on every lean camel..."
-                        <span className="text-gray-500"> — Quran 22:27</span>
+                {/* Islamic Quote - Minimal */}
+                <div className="mt-4 text-center">
+                    <p className="text-xs text-gray-600 italic">
+                        "And proclaim to the people the Hajj..." <span className="text-gray-500">— Quran 22:27</span>
                     </p>
                 </div>
             </div>

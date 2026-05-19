@@ -1,12 +1,16 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+
+// ================= HELPER FUNCTIONS =================
+const formatPKR = (amount: number) => {
+    return `PKR ${amount.toLocaleString('en-PK')}`;
+};
 
 const useInView = (threshold = 0.1) => {
     const ref = useRef<HTMLDivElement>(null);
     const [isInView, setIsInView] = useState(false);
-
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -17,11 +21,9 @@ const useInView = (threshold = 0.1) => {
             },
             { threshold }
         );
-
         if (ref.current) observer.observe(ref.current);
         return () => observer.disconnect();
     }, [threshold]);
-
     return { ref, isInView };
 };
 
@@ -30,7 +32,6 @@ export default function HajjUmrahPackagesSection() {
     const { ref, isInView } = useInView();
     const [activeCategory, setActiveCategory] = useState('All');
 
-    // Focused strictly on Hajj & Umrah categories
     const filters = ['All', 'Umrah', 'Hajj', 'Madinah', 'Ramadan'];
 
     const packages = [
@@ -39,84 +40,84 @@ export default function HajjUmrahPackagesSection() {
             title: 'Premium Umrah Package',
             category: 'Umrah',
             duration: '10 Days / 9 Nights',
-            price: 1299,
-            originalPrice: 1599,
+            price: 365000,
+            originalPrice: 480000,
             rating: 4.9,
             reviews: 842,
             image: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?q=80&w=800&auto=format&fit=crop',
             inclusions: ['Flights', '5★ Hotel', 'Visa', 'Transport', 'Ziyarat'],
             badge: 'Best Seller',
-            discount: '19% OFF'
+            discount: '24% OFF'
         },
         {
             id: 2,
             title: 'Hajj Essential Package',
             category: 'Hajj',
             duration: '21 Days / 20 Nights',
-            price: 4899,
-            originalPrice: 5499,
+            price: 985000,
+            originalPrice: 1200000,
             rating: 5.0,
             reviews: 615,
             image: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=800&auto=format&fit=crop',
             inclusions: ['Flights', 'Makkah/Madinah Stay', 'Guided Manasik', 'Transport', 'Meals'],
             badge: 'Limited Seats',
-            discount: '11% OFF'
+            discount: '18% OFF'
         },
         {
             id: 3,
             title: 'Madinah Extension Stay',
             category: 'Madinah',
             duration: '5 Days / 4 Nights',
-            price: 699,
-            originalPrice: 899,
+            price: 250000,
+            originalPrice: 340000,
             rating: 4.8,
             reviews: 423,
             image: 'https://images.unsplash.com/photo-1542816417-0983c9c9ad53?q=80&w=800&auto=format&fit=crop',
             inclusions: ['Hotel', 'Rawdah Booking', 'Ziyarat Tours', 'Transport', 'Breakfast'],
             badge: 'Popular',
-            discount: '22% OFF'
+            discount: '26% OFF'
         },
         {
             id: 4,
             title: 'Ramadan Umrah Special',
             category: 'Ramadan',
             duration: '14 Days / 13 Nights',
-            price: 1799,
-            originalPrice: 2199,
+            price: 530000,
+            originalPrice: 700000,
             rating: 4.9,
             reviews: 587,
             image: 'https://images.unsplash.com/photo-1720549973451-018d3623b55a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTg5fHxoYWpqfGVufDB8fDB8fHww',
             inclusions: ['Flights', 'Iftar/Suhoor', '5★ Hotel', 'Visa', 'Daily Transport'],
             badge: 'Spiritual',
-            discount: '18% OFF'
+            discount: '24% OFF'
         },
         {
             id: 5,
             title: 'Family Umrah Deal',
             category: 'Umrah',
             duration: '8 Days / 7 Nights',
-            price: 2399,
-            originalPrice: 2899,
+            price: 305000,
+            originalPrice: 420000,
             rating: 4.7,
             reviews: 391,
             image: 'https://images.unsplash.com/photo-1579305796153-ab71ce202953?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTgzfHxoYWpqfGVufDB8fDB8fHww',
             inclusions: ['Flights', 'Connecting Rooms', 'Kids Discount', 'Visa', 'Airport Transfers'],
             badge: 'Family',
-            discount: '17% OFF'
+            discount: '27% OFF'
         },
         {
             id: 6,
             title: 'VIP Hajj Luxury',
             category: 'Hajj',
             duration: '18 Days / 17 Nights',
-            price: 8499,
-            originalPrice: 9999,
+            price: 1250000,
+            originalPrice: 1550000,
             rating: 5.0,
             reviews: 214,
             image: 'https://images.unsplash.com/photo-1589827577276-65d717348780?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aGFqanxlbnwwfHwwfHx8MA%3D%3D',
             inclusions: ['Business Class', '5★ Suites', 'Private Guide', 'VIP Tents', 'Full Board'],
             badge: 'Premium',
-            discount: '15% OFF'
+            discount: '19% OFF'
         }
     ];
 
@@ -133,7 +134,7 @@ export default function HajjUmrahPackagesSection() {
 
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                {/* Header - Matches Destinations Layout */}
+                {/* Header */}
                 <div className={`text-center mb-16 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <span className="inline-flex items-center gap-2 px-5 py-2.5 mb-6 bg-[#0f88c0]/10 rounded-full border border-[#0f88c0]/20">
                         <span className="text-2xl">🕋</span>
@@ -150,7 +151,7 @@ export default function HajjUmrahPackagesSection() {
                     </p>
                 </div>
 
-                {/* Category Filter - Matches Destinations Style */}
+                {/* Category Filter */}
                 <div className={`flex flex-wrap justify-center gap-3 mb-14 transition-all duration-700 ease-out delay-200 ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     {filters.map((cat, i) => (
                         <button
@@ -205,12 +206,12 @@ export default function HajjUmrahPackagesSection() {
                                     </span>
                                 )}
 
-                                {/* Price Overlay */}
+                                {/* Price Overlay - UPDATED TO PKR */}
                                 <div className="absolute bottom-4 right-4">
                                     <div className="bg-white/95 backdrop-blur-sm rounded-xl px-4 py-2.5 shadow-md">
                                         <div className="flex items-baseline gap-2">
-                                            <span className="text-xs text-gray-400 line-through">${pkg.originalPrice}</span>
-                                            <span className="text-lg font-bold text-[#0A192F]">${pkg.price}</span>
+                                            <span className="text-xs text-gray-400 line-through">{formatPKR(pkg.originalPrice)}</span>
+                                            <span className="text-lg font-bold text-[#0A192F]">{formatPKR(pkg.price)}</span>
                                         </div>
                                         <span className="text-xs text-gray-500 font-medium">per person</span>
                                     </div>
@@ -267,7 +268,7 @@ export default function HajjUmrahPackagesSection() {
 
                                 {/* CTA Button */}
                                 <button
-                                    onClick={() => router.push(`/packages?id=${pkg.id}`)}
+                                    onClick={() => router.push('/packages')}  // ✅ Changed: Ab sirf /packages par jayega
                                     className="w-full mt-auto py-3 bg-linear-to-r from-[#0f88c0] to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold text-base rounded-full shadow-lg shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-400/50 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
                                 >
                                     <span>View Package</span>

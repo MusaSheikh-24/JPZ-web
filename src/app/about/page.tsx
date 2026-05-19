@@ -118,7 +118,7 @@ export default function AboutPage() {
                 <div className={`relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-32 transition-all duration-700 ease-out ${isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                     <div className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 bg-white/10 backdrop-blur-sm rounded-full border border-white/15">
                         <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                        <span className="text-sm font-bold text-white">About Our Pilgrimage Services</span>
+                        <span className="text-sm font-bold text-white">🕋 About Our Pilgrimage Services</span>
                     </div>
 
                     <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight tracking-tight mb-6">
@@ -372,7 +372,7 @@ export default function AboutPage() {
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>
                         </a>
-                        <a href="/contact" className="px-10 py-4 bg-white/5 text-white font-bold text-lg rounded-full border border-white/20 hover:bg-white/10 hover:border-emerald-400/50 transition-all duration-300 cursor-pointer">
+                        <a href="/#contact" className="px-10 py-4 bg-white/5 text-white font-bold text-lg rounded-full border border-white/20 hover:bg-white/10 hover:border-emerald-400/50 transition-all duration-300 cursor-pointer">
                             Contact Our Team
                         </a>
                     </div>
